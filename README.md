@@ -80,3 +80,182 @@ Arkana generates analyst-ready reports including:
 - recommended response actions
 
 
+
+---
+# Current status
+
+Right now the project includes:
+- the core Python package layout under `arkana/`
+- a `config.py` file powered by `pydantic-settings`
+- a root `.env.example` file
+- a minimal `pyproject.toml`
+- test folders for `unit`, `integration`, and `fixtures`
+
+The API, database wiring, Docker Compose setup, and full CI workflow are not finished yet.
+
+## Getting started
+
+This section is written for a new developer joining the project for the first time.
+
+### 1. Install the tools you need
+
+Make sure you have the following installed on your machine:
+- Python 3.12
+- `pip`
+- Git
+- a terminal such as Terminal, iTerm, or VS Code terminal
+
+You can check your Python version with:
+
+```bash
+python --version
+```
+
+If your system uses `python3` instead of `python`, run:
+
+```bash
+python3 --version
+```
+
+### 2. Clone the repository
+
+Clone the project and move into the project folder:
+
+```bash
+git clone <REPO_URL>
+cd <REPO_FOLDER>
+```
+
+Replace `<REPO_URL>` with the actual Git URL and `<REPO_FOLDER>` with the folder name created by Git.
+
+### 3. Create a virtual environment
+
+A virtual environment keeps this project's Python packages separate from the rest of your computer.
+
+On macOS or Linux:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+If your machine uses `python3`, use:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+When the environment is active, you should usually see `(.venv)` at the beginning of your terminal prompt.
+
+### 4. Install the project dependencies
+
+Install the project in editable mode so local code changes are picked up immediately:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -e .
+```
+
+If that finishes without errors, the local package is installed correctly.
+
+### 5. Create your local environment file
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+For the current scaffold, the default value in `.env` is enough. Later, this file will hold local database and app settings.
+
+### 6. Verify the config loads correctly
+
+Run this command from the project root:
+
+```bash
+python -c "from arkana.config import settings; print(settings.database_url)"
+```
+
+If everything is working, you should see a PostgreSQL connection string printed in the terminal.
+
+### 7. Review the project layout
+
+The current codebase is organized like this:
+
+```text
+arkana/
+  api/
+  application/
+  domain/
+  infrastructure/
+    db/
+  config.py
+migrations/
+tests/
+  unit/
+  integration/
+  fixtures/
+README.md
+pyproject.toml
+.env.example
+```
+
+Use this as a guide for where new code should live:
+- `api/` for FastAPI routes and request/response models
+- `application/` for orchestration and workflow services
+- `domain/` for core business logic
+- `infrastructure/` for database and external system adapters
+- `tests/unit/` for fast isolated tests
+- `tests/integration/` for app and database level tests
+
+### 8. Run a simple smoke check
+
+You can also confirm the package is importable with:
+
+```bash
+python -c "import arkana; print('Arkana package imported successfully')"
+```
+
+This is not a full test suite, but it gives a new developer a quick confidence check that the scaffold is working.
+
+## Common problems
+
+### `ModuleNotFoundError: No module named 'arkana'`
+
+Make sure:
+- you are inside the project root
+- your virtual environment is activated
+- you ran `python -m pip install -e .`
+
+### `No module named pydantic_settings`
+
+This usually means dependencies were not installed in the active virtual environment. Run:
+
+```bash
+python -m pip install -e .
+```
+
+### Wrong Python version
+
+If the project behaves strangely, confirm you are using Python 3.12:
+
+```bash
+python --version
+```
+
+## Next developer tasks
+
+The next planned build steps are:
+- expand `pyproject.toml` with full app, dev, and test dependencies
+- add the FastAPI app skeleton with `/healthz` and `/readyz`
+- add Docker Compose for API and PostgreSQL
+- add unit tests for config and package smoke checks
+
+## Contributing
+
+Until the contribution workflow is fully documented, keep changes small and focused:
+- create one branch per task
+- keep commits readable and specific
+- avoid moving folders unless the ticket requires it
+- place new code in the correct module from the start
