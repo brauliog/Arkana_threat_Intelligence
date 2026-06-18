@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    database_url: str = "postgresql+psycopg://arkana:arkana@localhost:5432/arkana"
+    database_url: str = "postgresql+psycopg2://arkana:arkana@localhost:5432/arkana"
 
     model_config = SettingsConfigDict(
         env_file='.env',

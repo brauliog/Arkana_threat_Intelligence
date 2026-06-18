@@ -88,10 +88,15 @@ Right now the project includes:
 - the core Python package layout under `arkana/`
 - a `config.py` file powered by `pydantic-settings`
 - a root `.env.example` file
-- a minimal `pyproject.toml`
+- a `pyproject.toml` with runtime, dev, and test dependencies
+- a minimal FastAPI app with `/healthz` and `/readyz` endpoints
+- Docker and Docker Compose setup for local API, PostgreSQL, and test runs
 - test folders for `unit`, `integration`, and `fixtures`
 
-The API, database wiring, Docker Compose setup, and full CI workflow are not finished yet.
+Still in progress:
+- database models, migrations, and repository wiring
+- enrichment, scoring, and campaign detection logic
+- CI workflow (GitHub Actions)
 
 ## Getting started
 
@@ -219,6 +224,54 @@ python -c "import arkana; print('Arkana package imported successfully')"
 
 This is not a full test suite, but it gives a new developer a quick confidence check that the scaffold is working.
 
+## Docker workflow
+
+You can run the full local stack with Docker instead of installing Python dependencies directly on your machine.
+
+### Prerequisites
+
+- Docker Desktop or Docker Engine
+- Docker Compose v2 (`docker compose`)
+
+### Start Postgres and the API
+
+From the project root:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+- PostgreSQL on port `5432`
+- the FastAPI API on port `8000` with hot reload enabled
+
+Verify the health endpoints:
+
+```bash
+curl http://localhost:8000/healthz
+curl http://localhost:8000/readyz
+```
+
+`/healthz` confirms the API process is running. `/readyz` confirms the API can reach PostgreSQL.
+
+### Run tests in a container
+
+```bash
+docker compose run --rm test
+```
+
+This uses the same image as the API service and runs the pytest suite.
+
+### Rebuild after dependency changes
+
+If you change `pyproject.toml`, rebuild the image before running again:
+
+```bash
+docker compose build api
+```
+
+The API service bind-mounts your local source code, so Python file changes are picked up automatically via uvicorn reload. Dependency changes require a rebuild.
+
 ## Common problems
 
 ### `ModuleNotFoundError: No module named 'arkana'`
@@ -247,10 +300,10 @@ python --version
 ## Next developer tasks
 
 The next planned build steps are:
-- expand `pyproject.toml` with full app, dev, and test dependencies
-- add the FastAPI app skeleton with `/healthz` and `/readyz`
-- add Docker Compose for API and PostgreSQL
-- add unit tests for config and package smoke checks
+- add Alembic migrations and database models under `infrastructure/db/`
+- wire repository and session management for PostgreSQL
+- add GitHub Actions CI workflow (build image + run pytest)
+- begin URL enrichment and campaign detection services
 
 ## Contributing
 

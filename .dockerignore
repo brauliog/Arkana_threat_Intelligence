@@ -1,0 +1,14 @@
+.git
+.venv
+.arkana_dev
+__pycache__
+.pytest_cache
+.mypy_cache
+.ruff_cache
+*.pyc
+.env
+*.egg-info
+.coverage
+htmlcov
+dist
+build

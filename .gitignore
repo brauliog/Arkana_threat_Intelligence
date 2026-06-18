@@ -1,0 +1,16 @@
+.venv/
+.arkana_dev/
+__pycache__/
+*.py[cod]
+*$py.class
+*.manager/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.env
+.DS_Store
