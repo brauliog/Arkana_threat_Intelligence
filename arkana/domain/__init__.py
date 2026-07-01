@@ -1,0 +1,1 @@
+"""Core business logic for normalization, signals, scoring, and clustering."""
